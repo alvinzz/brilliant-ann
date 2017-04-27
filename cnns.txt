@@ -1,10 +1,13 @@
-We can also skip spaces when striding. For example, if we had a \(3 x 3\) filter \(F\) and a \(7 x 7\) image \(M\), a stride \(S = 2\) would be applied as follows:
-![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-4-1.png) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-4-2.png) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-4-3.png)
-![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-4-4.png) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-4-5.png) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-4-6.png)
-![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-4-7.png) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-4-8.png) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-4-9.png)
+In **pooling**, we downsample the image to make it smaller. This is accomplished by replacing a \(N \text{x} N\) block in the image with a \(M \text{x} M\) block, where \(M < N\), but the smaller block contains the most important information from the larger block.
 
-If we have a \(20 \text{x} 20\) filter and an \(250 \text{x} 150\) image, and we want to use strides of size \(10\), how many positions will we apply the filter at?
+Which of the following values of \(M\) and \(N\) will result in the greatest reduction in image size?
 
 
-But what if we have an object which is only partially in the image? For example, suppose that we have the following filter:
-![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/3-2-6-1.png)
+We can apply the concept of striding from convolutions to max pooling as well.
+
+Suppose that \(N = 3\), \(M = 1\), and our stride is \(S = 2\). If we have a \(45 \text{x} 25 \text{x} 3\) input image, what will be the number of pixels in the downsampled image after applying this pooling operation?
+
+
+We now introduce two different methods for performing this downsampling.
+
+In **average pooling**, an \(N \text{x} N\) area is mapped to a single pixel, with value

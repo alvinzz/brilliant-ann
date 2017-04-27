@@ -1,0 +1,1 @@
+ANN-3-2-7: good complementary picture: http://cs231n.github.io/assets/cnn/cnn.jpeg

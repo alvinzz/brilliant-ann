@@ -1,13 +1,31 @@
-In **pooling**, we downsample the image to make it smaller. This is accomplished by replacing a \(N \text{x} N\) block in the image with a \(M \text{x} M\) block, where \(M < N\), but the smaller block contains the most important information from the larger block.
+So far, we have studied how neural nets are powerful tools for prediction and classification. Can we also apply them to generation?
 
-Which of the following values of \(M\) and \(N\) will result in the greatest reduction in image size?
-
-
-We can apply the concept of striding from convolutions to max pooling as well.
-
-Suppose that \(N = 3\), \(M = 1\), and our stride is \(S = 2\). If we have a \(45 \text{x} 25 \text{x} 3\) input image, what will be the number of pixels in the downsampled image after applying this pooling operation?
+In this section, we will learn about Generative Adversarial Nets, and how they can be used to generate realistic-looking images from scratch.
 
 
-We now introduce two different methods for performing this downsampling.
 
-In **average pooling**, an \(N \text{x} N\) area is mapped to a single pixel, with value
+
+How can we make a neural net generative? Neural nets are **deterministic**, that is, they will always give the same output if you feed them the same input.
+
+Rather than introducing randomness into the network itself, which would cause problems in backpropagation, we instead sample our input \(z\) from a distribution \(p_z(z)\), normally a multivariate unit Gaussian (chosen for mathematical convenience).
+
+Once we have sampled our input from this distribution, we want to run it through our Generative network to get something that appears realistic. Let's denote the output from the Generator on \(z\) to be \(G(z)\).
+
+How should we define our loss function for the Generative network?
+
+
+
+A Discriminator network is used to attempt to distinguish samples created by the Generator and samples from the real world.
+
+Let's now define some notation: let \(x\) represent a sample from the real world, and let \(p_x\) be the true distribution of real-world possibilities. Let \(D(k)\) be the output of the Discriminator on some sample \(k\), the probability that \(k\) is from the real world (not created by the generator).
+
+Now, suppose that we have some \(x\) sampled from the real world. Which of the loss functions for \(D(x)\) pictured below makes sense?
+
+1) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-2-3-1.png)
+2) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-2-3-2.png)
+3) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-2-3-3.png)
+4) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-2-3-4.png)
+
+
+
+Now, for samples \(x\) drawn from the real world, we define the loss function of the Discriminator to be \(-\log(D(x))\), whereas for samples \(G(z)\) created by the Generator, the loss function is \(-

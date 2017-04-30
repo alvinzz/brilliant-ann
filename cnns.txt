@@ -1,31 +1,12 @@
-So far, we have studied how neural nets are powerful tools for prediction and classification. Can we also apply them to generation?
+We'll now look at some of the state-of-the-art work being done by Google's DeepMind team.
 
-In this section, we will learn about Generative Adversarial Nets, and how they can be used to generate realistic-looking images from scratch.
+In 2014, DeepMind made waves within the machine learning community by training a deep neural network to play Atari games completely from scratch, even achieving superhuman performance. This was the first time that an AI of this scale had been trained completely autonomously, without any human input or supervision during training.
 
-
-
-
-How can we make a neural net generative? Neural nets are **deterministic**, that is, they will always give the same output if you feed them the same input.
-
-Rather than introducing randomness into the network itself, which would cause problems in backpropagation, we instead sample our input \(z\) from a distribution \(p_z(z)\), normally a multivariate unit Gaussian (chosen for mathematical convenience).
-
-Once we have sampled our input from this distribution, we want to run it through our Generative network to get something that appears realistic. Let's denote the output from the Generator on \(z\) to be \(G(z)\).
-
-How should we define our loss function for the Generative network?
+Recently, DeepMind made headlines again by creating AlphaGo, which defeated one of the world's leading Go players, Lee Sedol, in a widely publicized match in March 2016. In this section, we will explore the techniques behind the Atari AI, and how these ideas were applied to Go with such success.
 
 
 
-A Discriminator network is used to attempt to distinguish samples created by the Generator and samples from the real world.
+In **reinforcement learning**, an **agent** takes **actions** within an **environment**. Based on these actions, the agent achieves different **states** with different **rewards**. For example, in tic-tac-toe, your reward might be 1 if you got three-in-a-row, -1 if your opponent got three-in-a-row, and 0 otherwise. Your **state space** would consist of all possible board configurations.
 
-Let's now define some notation: let \(x\) represent a sample from the real world, and let \(p_x\) be the true distribution of real-world possibilities. Let \(D(k)\) be the output of the Discriminator on some sample \(k\), the probability that \(k\) is from the real world (not created by the generator).
-
-Now, suppose that we have some \(x\) sampled from the real world. Which of the loss functions for \(D(x)\) pictured below makes sense?
-
-1) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-2-3-1.png)
-2) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-2-3-2.png)
-3) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-2-3-3.png)
-4) ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-2-3-4.png)
-
-
-
-Now, for samples \(x\) drawn from the real world, we define the loss function of the Discriminator to be \(-\log(D(x))\), whereas for samples \(G(z)\) created by the Generator, the loss function is \(-
+In the following picture, suppose that you are playing 'X'. How many actions can you take, and what is the average score of these actions?
+![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-5-2-1.png)

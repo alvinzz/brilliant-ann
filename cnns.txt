@@ -10,3 +10,62 @@ In **reinforcement learning**, an **agent** takes **actions** within an **enviro
 
 In the following picture, suppose that you are playing 'X'. How many actions can you take, and what is the average score of these actions?
 ![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-5-2-1.png)
+
+
+
+This illustrates one of the big challenges in reinforcement learning: in our tic-tac-toe example, even though only one move would not lose on the following turn, your reward would still be 0 for any of the moves you make. This is characteristic of a **sparse** reward function -- it is updated for few board states.
+
+Which of the problems we are studying has a more sparse reward function?
+
+
+
+Incredibly, due to the computational power now available with today's computers and the magic of gradient descent, we can successfully do RL even with very sparse reward functions.
+
+We will now study the method of **policy gradients** for RL. Although this was not the method presented in the original paper, the authors have [since achieved](https://arxiv.org/pdf/1602.01783.pdf) equivalent results with reduced training time using policy gradients, which were also used in the AlphaGo algorithm.
+
+
+
+
+In the policy gradient framework, we feed the game state into a model, typically a fully connected neural network, which then outputs the probabilities of taking each possible action. We want to train this neural net such that it outputs high probabilities for actions that will lead to high rewards, and low probabilities otherwise.
+
+We **rollout** the policy described by the neural net by simulating a bunch of games, taking actions according to the probabilities specified by the model. Typically, the **rollout** size is chosen to be around 100. We then perform gradient ascent to maximize the end reward state of these simulated games, and repeat.
+
+Is rollout a stochastic or deterministic policy?
+
+
+
+That's the heart of the RL algorithm used in AlphaGo! Incredibly simple, yet incredibly powerful with enough training time and computational power.
+
+However, AlphaGo also uses some other tricks to order to achieve their superhuman performance. First, an expert model is trained, which is similar to a policy model, except that the goal now is just to match the expert's next move given an input state. Then the weights of the policy model are initialized using the values found from the expert model. Secondly, during rollout, the policy plays against a random previous iteration of itself, which helps prevent overfitting and getting stuck in local maxima.
+
+Additionally, at test time, rather than just choosing moves based on the output of the policy model, AlphaGo uses a more sophisticated algorithm. In addition to training a policy model, they also train a value model, which accepts states as inputs and outputs the probability of winning from those states if following the trained policy model.
+
+
+
+
+AlphaGo then uses the value and expert models to perform a modified version of Monte-Carlo Tree Search to select the best move. The nodes of this tree represent states, which have "valuations" associated with them, calculated by averaging the output of the value model and the reward from simulating a simplified version of the expert model on the node's state. Edges in this tree represent state-action pairs, and each points from its state to the state reached after taking its action. Each edge also has a probability and "action value" associated with it, but an edge's probabilities are just the probabilities given by the expert model for its state, while its action value is initially set to 0.
+
+We start with just our initial state as the root node. Then, in each "simulation step", we start from the root and follow the edge with the highest (probability + action value), but with a penalty for the number of simulation steps the edge was in previously (to encourage tree exploration). We continue tracing edges until we reach the end of a game. We then update the action values of each of the edges we took in this simulation step by setting them to the average valuation of the nodes below that edge that we visited in this simulation step.
+
+For each move, AlphaGo performs these simulation steps for as long as it can, given the time limit. Note that a lot of the choices in the above algorithm are quite arbitrary (including the choice to use the expert rather than the policy model!), and were chosen simply because they worked better in practice.
+
+
+
+
+Nevertheless, AlphaGo's results are **very** impressive, especially when compared to previous Go AIs. Go is considered to be much more difficult than chess for AI, since the state space is exponentially larger, and it can be difficult to tell who is winning from a given board state. However, in addition to defeating Lee Sedol, one of the world's leading Go experts, 4-1, it achieved nearly double the rating of the previous best AI, and was actually the first Go AI *able* to defeat a human professional in a match.
+
+Some fun facts about the scope of AlphaGo's model: their policy and expert models were composed of 13 convolutional layers, while their value model was 12 convolutional layers, followed by 2 fully connected layers. They trained their expert model on 50 GPUs for 3 weeks, their policy model (pre-trained on the expert model) on 50 GPUs for one day, and used a whopping 1,920 CPUs and 280 GPUs for their modified Monte-Carlo Tree Search during the Lee Sedol match!
+
+
+
+
+We will now leave the world of games, and examine some of the real-world applications of reinforcement learning, including autonomous vehicles and autonomous robots. RL has been used very effectively in simulations, learning to control autonomous agents which can react to novel situations in the environment. The Atari environments were an example of this, with agents able to learn complex strategies from raw pixel data, such as doing this for breakout:
+![](https://i.ytimg.com/vi/TmPfTpjtdgg/maxresdefault.jpg|height=300)
+
+However, it also applies to [physics-based environments](http://www.cs.ubc.ca/~van/papers/2016-TOG-deepRL/2016-TOG-deepRL.pdf):
+![](https://raw.githubusercontent.com/alvinzz/brilliant-ann/master/5-5-9-1.png)
+
+This has been demonstrated to translate to the real world, with experiments even showing that [collaborative behavior](http://www.goatstream.com/research/papers/SA2013/SA2013.pdf) can be learned.
+![](https://arxiv.org/pdf/1610.00633.pdf)
+
+Perhaps the day when robots will finally save us from having the fold laundry isn't too far off!
